@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="(info,index) in infos" :key="index">{{ info.title }}</li>
+      </ul>
+    </div>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          infos: []
+        },
+
+        methods: {
+          ajaxPromise(params) {
+            return new Promise((resovle, reject) => {
+              $.ajax({
+                type: params.type || "get",
+                async: params.async || true,
+                url: params.url,
+                data: params.data || "",
+                success: res => {
+                  resovle(res);
+                },
+                error: err => {
+                  reject(err);
+                }
+              });
+            });
+          },
+          setData(data) {
+            this.infos = data;
+          },
+
+          async doJob() {
+            this.ajaxPromise({ url: "dataNotExist.json" })
+              .then(data => {
+                this.setData(data);
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
+        },
+        mounted() {
+          this.doJob();
+        }
+      });
+    </script>
+  </body>
+</html>

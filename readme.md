@@ -34,6 +34,7 @@ this.work01(3000).then(info => {
     });
   });
 });
+
 ```
 
 ## 02 async / await
@@ -57,5 +58,57 @@ async doJob() {
   this.showInfo(await this.work01(3000));
   this.showInfo(await this.work02(2000));
   this.showInfo(await this.work03(1000));
+}
+```
+
+## 03 Promise catch error
+
+[Sample Page 03](promiseSample03.html)
+
+若要加上錯誤處理，則是添加上`reject()`區段，並於執行事件的方法中加上`catch()`來捕捉例外
+
+```js
+ajaxPromise(params) {
+  return new Promise((resovle, reject) => {
+    $.ajax({
+      type: params.type || "get",
+      async: params.async || true,
+      url: params.url,
+      data: params.data || "",
+      success: res => {
+        resovle(res);
+      },
+      error: err => {
+        reject(err);
+      }
+    });
+  });
+},
+setData(data) {
+  this.infos = data;
+},
+async doJob() {
+  this.ajaxPromise({ url: "dataNotExist.json" })
+    .then(data => {
+      this.setData(data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+```
+
+## 04 async / await catch error
+
+若改寫成 `async / await`，`Promise` 發生錯誤時會拋出`reject()`的異常，因此在執行事件中需要透過`try...catch...`來處理
+
+```js
+async doJob() {
+  try {
+    let data = await this.ajaxPromise({ url: "dataNotExist.json" });
+    this.setData(data);
+  } catch (error) {
+    console.log(error);
+  }
 }
 ```
