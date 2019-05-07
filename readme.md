@@ -100,6 +100,8 @@ async doJob() {
 
 ## 04 async / await catch error
 
+[Sample Page 04](promiseSample04.html)
+
 若改寫成 `async / await`，`Promise` 發生錯誤時會拋出`reject()`的異常，因此在執行事件中需要透過`try...catch...`來處理
 
 ```js
