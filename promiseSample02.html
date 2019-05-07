@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.13/dayjs.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="(info,index) in infos" :key="index">{{ info.title }} @ seconds:{{ info.time | formatDateTime }}</li>
+      </ul>
+    </div>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          infos: []
+        },
+        filters: {
+          formatDateTime(date) {
+            return dayjs(date).format("YYYY/MM/DD hh:mm:ss");
+          }
+        },
+        methods: {
+          showInfo(info) {
+            this.infos.push(info);
+          },
+          logTime(title) {
+            console.log(`${title} - ${dayjs(new Date()).format("YYYY/MM/DD hh:mm:ss")}`);
+          },
+          work01(ms) {
+            return new Promise((resolve, reject) => {
+              let title = "work01";
+              this.logTime(`${title} start`);
+              setTimeout(ms => {
+                let time = new Date();
+                this.logTime(`${title} end`);
+                resolve({ title, time });
+              }, ms);
+            });
+          },
+          work02(ms) {
+            return new Promise((resolve, reject) => {
+              let title = "work02";
+              this.logTime(`${title} start`);
+              setTimeout(ms => {
+                let time = new Date();
+                this.logTime(`${title} end`);
+                resolve({ title, time });
+              }, ms);
+            });
+          },
+          work03(ms) {
+            return new Promise((resolve, reject) => {
+              let title = "work03";
+              this.logTime(`${title} start`);
+              setTimeout(ms => {
+                let time = new Date();
+                this.logTime(`${title} end`);
+                resolve({ title, time });
+              }, ms);
+            });
+          },
+          async doJob() {
+            this.showInfo(await this.work01(3000));
+            this.showInfo(await this.work02(2000));
+            this.showInfo(await this.work03(1000));
+          }
+        },
+        mounted() {
+          this.doJob();
+        }
+      });
+    </script>
+  </body>
+</html>
